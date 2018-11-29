@@ -29,7 +29,9 @@ SECRET_KEY = 'algnck-h0j8=glujy0$dzh4(16b5z*41prq-%zqd)c2&-kx(5l'
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
+AUTHENTICATION_BACKENDS=(
+    "users.views.custom_backend",
+)
 
 
 # Application definition

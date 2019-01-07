@@ -1,0 +1,63 @@
+{% extends 'org_base.html' %}
+{% load staticfiles %}
+{% block title %}
+    机构首页
+{% endblock %}
+{% block custom_middle %}
+    <div class="middle companyheader">
+        <div class="wp">
+            <img class="fl" style="width: 112px;height: 103px" src="{{ MEDIA_URL }}{{ org.image }}"/>
+            <div class="head fl">
+                <h1>
+                    {{ org.name }}
+                    <img src="{% static 'images/authentication.png' %}"/>
+                    <img src="{% static 'images/gold.png' %}"/>
+                </h1>
+                <p class="fl">
+                    <span class="fl" style="margin-top:8px;color:#848484;">推荐指数： </span>
+                    <span class="precision company-credit" data-star-scope="5.0"></span>
+                    <span class="key">5.0</span>
+                </p>
+            </div>
+            <div class="btn fr collectionbtn  notlogin
+                 "data-favid="22" data-fav-type="1">
+                {% if has_fav  %}已收藏{% else %}收藏{% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block custom_right %}
+    <div class="right companycenter layout" >
+		<div class="head">
+			<h1>机构课程</h1>
+		</div>
+		<div class="brief group_list">
+                {% for course in all_courses  %}
+                    <div class="module1_5 box">
+                    <a class="comp-img-box" href="{% url 'org:course-detail' org.id %}">
+
+                        <img width="214" height="195" src="{{ MEDIA_URL }}{{ course.image }}"/>
+                    </a>
+                    <div class="des">
+                        <a href="{% url 'org:course-detail' org.id %}"><h2>{{ course.name }}</h2></a>
+                        <span class="fl">课时：<i class="key">0</i></span>
+                        <span class="fr">学习人数：{{ course.studtent }}</span>
+                    </div>
+                    <div class="bottom">
+                        <span class="fl">{{ course.courseOrg }}</span>
+                         <span class="star fr  notlogin
+                            " data-favid="13" data-fav-type="4">
+                            0
+                        </span>
+                    </div>
+                </div>
+                {% endfor %}
+
+		</div>
+			<div class="pageturn">
+                <ul class="pagelist">
+                    <li class="active"><a href="?page=1">1</a></li>
+                </ul>
+            </div>
+	</div>
+{% endblock %}

@@ -78,21 +78,20 @@
             </div>
             <div class="fl form-box">
                 <h2>忘记密码</h2>
-                <form id="jsFindPwdForm" method="post" action="forgetpwd.html" autocomplete="off">
-                    <input type='hidden' name='csrfmiddlewaretoken' value='mymQDzHWl2REXIfPMg2mJaLqDfaS1sD5' />
+                <form id="jsFindPwdForm" method="POST" action='{% url 'forget' %}' autocomplete="off">
                     <div class="form-group marb20 ">
                         <label>帐&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;号</label>
-                        <input type="text" id="account" name="email" value="None" placeholder="邮箱" />
+                        <input type="text" id="account" name="email" value="allen8_liu@pegatroncorp.com" placeholder="邮箱" />
                     </div>
                     <div class="form-group captcha1 marb38">
                         <label>验&nbsp;证&nbsp;码</label>
                         {{ forget_form.captcha }}
                     </div>
-                    <div class="error btns" id="jsForgetTips"></div>
+                    <div class="error btns" id="jsForgetTips">{% for error in forget_form.errors.values %}{{ error }}{% endfor %}{{ msg }}</div>
                     <input type="hidden" name="sms_type" value="1">
                     <input class="btn btn-green" id="jsFindPwdBtn" type="submit" value="提交" />
                     <p class="form-p" style="bottom:40px;">您还可以<a href="login.html"> [直接登录]</a></p>
-                <input type='hidden' name='csrfmiddlewaretoken' value='5I2SlleZJOMUX9QbwYLUIAOshdrdpRcy' />
+                    {% csrf_token %}
                 </form>
             </div>
         </div>

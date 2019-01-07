@@ -19,3 +19,6 @@ class ForgetForm(forms.Form):
     captcha = CaptchaField(error_messages={"invalid": u'验证码错误！'})
 
 
+class ResetPasswordForm(forms.Form):
+    new_pwd = forms.CharField(required=True, min_length=5)
+    confirmed_pwd = forms.CharField(required=True, min_length=5)

@@ -49,7 +49,8 @@ INSTALLED_APPS = [
     'operation',
 	'xadmin',
 	'crispy_forms',
-    'captcha'
+    'captcha',
+    'pure_pagination',
 ]
 
 AUTH_USER_MODEL = "users.UserProfile"
@@ -80,6 +81,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.core.context_processors.media'
             ],
         },
     },
@@ -120,6 +122,11 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+PAGINATION_SETTING = {
+    'PAGE_RANGE_DISPLAYED': 10,
+    'MAGRIN_PAGES_DISPLAYED': 2,
+    'SHOW_FIRST_PAGE_WHEN_INVAILD': True
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.9/topics/i18n/
@@ -152,3 +159,7 @@ EMAIL_HOST_USER = 'liu_heyu@126.com'
 EMAIL_HOST_PASSWORD = '19910820'
 EMAIL_USE_TLS = False
 EMAIL_FROM = 'liu_heyu@126.com'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+

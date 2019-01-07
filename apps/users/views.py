@@ -7,7 +7,7 @@ from django.db.models import Q
 from .models import UserProfile,EmailVerifyRecord
 from django.views.generic.base import View
 from django.contrib.auth.hashers import make_password
-from .forms import LoginForm, ReigsterForm, ForgetForm
+from .forms import LoginForm, ReigsterForm, ForgetForm, ResetPasswordForm
 from utils.send_mail import send_register_mail
 
 class custom_backend(ModelBackend):
@@ -95,8 +95,39 @@ class ForgetView(View):
         return render(request, 'forgetpwd.html', {'forget_form' : ForgetForm})
 
     def post(self, request):
-        forget_form = ForgetForm(request)
+        forget_form = ForgetForm(request.POST)
         if forget_form.is_valid():
             email = request.POST.get('email', '')
-            send_register_mail(email=email, send_type='forget')
+            send_status = send_register_mail(email=email, send_type='forget')
+            if send_status:
+                return render(request, 'send_success.html')
+        else:
+            return render(request, 'forgetpwd.html', {'forget_form': forget_form})
 
+
+class ResetView(View):
+    def get(self, request, active_code):
+        print('active code is ', active_code)
+        all_code = EmailVerifyRecord.objects.filter(code=active_code)
+        if all_code:
+            for record in all_code:
+                email = record.email
+                return render(request, 'password_reset.html', {'email': email})
+        else:
+            return render(request, 'active_fail.html')
+        return render(request, 'login.html')
+
+
+class ModifyView(View):
+    def post(self, request):
+        reset_pwd_form = ResetPasswordForm(request.POST)
+        if reset_pwd_form.is_valid():
+            new_pwd = request.POST.get('new_pwd', '')
+            confirmed_pwd = request.POST.get('confirmed_pwd', '')
+            email = request.POST.get('email', '')
+            if new_pwd != confirmed_pwd:
+                return render(request, 'password_reset.html', {'email': email, 'msg': u'密码输入不匹配'})
+            user = UserProfile.objects.get(email=email)
+            user.password = make_password(new_pwd)
+            user.save()
+            return  render(request, 'login.html')

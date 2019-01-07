@@ -33,7 +33,7 @@ def send_register_mail(email, send_type="register"):
 
     if send_type == 'forget':
         email_title = u'forget email find'
-        email_body = u'please click the url http://127.0.0.1:8000/forget/{0}/'.format(code)
+        email_body = u'please click the url http://127.0.0.1:8000/reset/{0}/'.format(code)
         send_status = send_mail(email_title, email_body, EMAIL_FROM, [email])
         return send_status
 

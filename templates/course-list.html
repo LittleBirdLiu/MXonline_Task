@@ -8,15 +8,15 @@
 			<div class="left layout">
                  <div class="head">
             <ul class="tab_header">
-                <li class="active"><a href="?sort=">最新 </a></li>
-                <li ><a href="?sort=hot">最热门</a></li>
-                <li ><a href="?sort=students">参与人数</a></li>
+                <li {% ifequal sort '' %}class="active"{% endifequal %}><a href="?sort=">最新 </a></li>
+                <li {% ifequal sort 'hot' %}class="active"{% endifequal %}><a href="?sort=hot">最热门</a></li>
+                <li {% ifequal sort 'students' %}class="active"{% endifequal %}><a href="?sort=students">参与人数</a></li>
             </ul>
         </div>
                 <div id="inWindow">
             <div class="tab_cont " id="content">
             <div class="group_list">
-                {% for course in  all_course %}
+                {% for course in  all_course.object_list %}
                      <div class="box">
                         <a href="{% url 'course:detail' course.id%}">
                             <img width="280" height="350" class="scrollLoading" src="{{ MEDIA_URL }}{{ course.image }}"/>
@@ -25,8 +25,8 @@
                             <a href="{% url 'course:detail' course.id%}">
                                 <h2>{{ course.name }}</h2>
                             </a>
-                            <span class="fl">时长：<i class="key">30</i></span>
-                            <span class="fr">学习人数：2&nbsp;&nbsp;</span>
+                            <span class="fl">时长：<i class="key">{{ course.learn_time }}</i></span>
+                            <span class="fr">学习人数：{{ course.students }}&nbsp;&nbsp;</span>
                         </div>
                         <div class="bottom">
                             <a href="course-detail.html"><span class="fl">{{ course.courseOrg }}</span></a>
@@ -38,17 +38,31 @@
                     </div>
                 {% endfor %}
             </div>
-            <div class="pageturn">
-                <ul class="pagelist">
-                                <li class="active"><a href="?page=1">1</a></li>
-                                <li><a href="?page=2" class="page">2</a></li>
-                        <li class="long"><a href="?page=2">下一页</a></li>
-                </ul>
             </div>
+        <div class="pageturn">
+            <ul class="pagelist">
+            {% if all_course.has_previous %}
+                <li class="long"><a href="?{{ all_course.pervious_page_number.querystring }}">上一页</a></li>
+            {% endif %}
+            {% for page in all_course.pages %}
+                {% if page %}
+                    {% ifequal page all_course.number %}
+                        <li class="active"><a href="?{{ page.querystring }}">{{ page }}</a></li>
+                    {% else %}
+                        <li><a href="?{{ page.querystring }}">{{ page }}</a></li>
+                    {% endifequal %}
+                {% else %}
+                    <li class="none"><a href="">...</a></li>
+                {% endif %}
+            {% endfor %}
+            {% if all_course.has_next %}
+                <li class="long"><a href="?{{ all_course.next_page_number.querystring }}" class="next">下一页</a></li>
+            {% endif %}
+            </ul>
         </div>
+		</div>
         </div>
-			</div>
-                <div class="right layout">
+            <div class="right layout">
 				<div class="head">热门课程推荐</div>
 				<div class="group_recommend">
                 {% for course in fav_course %}
@@ -60,14 +74,13 @@
 						</dt>
 						<dd>
 							<a target="_blank" href=""><h2>{{ course.name }}</h2></a>
-							<span class="fl">难度：<i class="key">{{ course.degree }}</i></span>
+							<span class="fl">难度：<i class="key">{{ course.get_degree_display }}</i></span>
 						</dd>
 					</dl>
                 {% endfor %}
 				</div>
+            </div>
         </div>
-			</div>
-		</div>
-	</div>
-</section>
+    </div>
+    </section>
 {% endblock %}

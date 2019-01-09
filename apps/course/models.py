@@ -13,13 +13,14 @@ class course(models.Model):
     name = models.CharField(max_length=50, verbose_name='课程名')
     desc = models.CharField(max_length=300, verbose_name=u'课程介绍')
     detail = models.TextField(verbose_name=u'课程详情')
-    degree = models.CharField(max_length=6, verbose_name=u'难度')
+    degree = models.CharField(max_length=6, verbose_name=u'难度', choices=(('cj', u'初级'), ('zj', u'中级'), ('gj', u'高级')))
     learn_time = models.IntegerField(default=0, verbose_name='学习时长')
-    studtent = models.IntegerField(default=0, verbose_name='学习人数')
+    students = models.IntegerField(default=0, verbose_name='学习人数')
     fav_numbers = models.IntegerField(default=0, verbose_name='收藏人数')
     image = models.ImageField(upload_to='course/%Y/%M', verbose_name='封面图', max_length=100)
     click_number = models.IntegerField(default=0, verbose_name='点击数')
     add_time = models.DateTimeField(default=datetime.now, verbose_name='添加时间')
+    tag = models.CharField(max_length=50, verbose_name=u'标签', default='')
 
     class Meta:
         verbose_name = '课程'
